@@ -1,6 +1,6 @@
-# Tastings
+# Job Tracking App (Tastings / Sampling)
 
-A small web app for the iPhone, made for running tasting stalls.
+A small web app for the iPhone, built for an **alcohol brand ambassador** job — for logging in-store tastings / sampling shifts.
 
 - Two big buttons count the people you talk to: sample given, or rejected / ignored.
 - It keeps the paid hours, the km you drove and the parking for each day.
@@ -8,7 +8,7 @@ A small web app for the iPhone, made for running tasting stalls.
 - It shows what a day and a pay period should pay, before tax, so you can check your payslip.
 
 It works with no reception. Everything is saved on the phone first, then copied to your Google
-account when there is a connection (the same Firebase project as Hours and Pace).
+account when there is a connection (your own Firebase project).
 
 `SPEC.md` describes how it is built, in full.
 
