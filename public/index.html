@@ -1,0 +1,148 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, maximum-scale=1">
+<title>Tastings</title>
+<meta name="description" content="Count people, hours, km and parking for tasting shifts.">
+<meta name="theme-color" content="#F6F1FF">
+<meta name="color-scheme" content="light">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="Tastings">
+<link rel="manifest" href="/manifest.webmanifest">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="icon" href="/icon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<!-- The font must never hold up the app inside a store with poor reception: load it without blocking. -->
+<link href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;500;600;700;800&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
+<link rel="stylesheet" href="/styles.css?v=6">
+</head>
+<body>
+
+<div class="boot" id="boot"><div class="boot-mark"></div></div>
+
+<!-- ── sign in ─────────────────────────────────────────── -->
+<div class="gate" id="gate" hidden>
+  <div class="gate-card">
+    <div class="gate-orb"></div>
+    <h1>Tastings</h1>
+    <p>Count people. Track hours, km and parking.</p>
+    <div class="install" id="installHint" hidden>
+      <p class="install-t">Put it on your Home Screen first</p>
+      <ol>
+        <li>Tap the Share button in Safari.</li>
+        <li>Choose "Add to Home Screen".</li>
+        <li>Open Tastings from its new icon, then sign in there.</li>
+      </ol>
+      <button class="linkish" data-act="skipInstall">Continue here anyway</button>
+    </div>
+    <button class="btn btn-primary btn-big" id="signIn" data-act="signIn">Sign in with Google</button>
+    <p class="gate-note" id="gateNote"></p>
+  </div>
+</div>
+
+<!-- ── app ─────────────────────────────────────────────── -->
+<main class="app" id="app" hidden>
+  <header class="top">
+    <h1>Tastings</h1>
+    <span class="pill pill-demo" id="demoPill" hidden>Demo</span>
+    <button class="icon-btn help-btn" data-act="help" aria-label="How to use this app">?</button>
+  </header>
+
+  <div class="bar bar-update" id="updateBar" hidden>
+    <span>New version ready</span>
+    <button class="btn btn-sm" data-act="updateNow">Update now</button>
+  </div>
+  <div class="bar bar-sign" id="signBar" hidden>
+    <span>Sign in to back up your work</span>
+    <button class="btn btn-sm" data-act="signIn">Sign in</button>
+  </div>
+  <div class="bar bar-sign" id="waitBar" hidden>
+    <span>Your newest work is only on this phone. Open the app with internet on so it is backed up.</span>
+  </div>
+  <div class="bar bar-bad" id="storeBar" hidden>
+    <span>This phone has stopped saving new changes. Keep the app open with internet on, then look at Settings › My data.</span>
+  </div>
+
+  <section class="view" id="viewToday"></section>
+  <section class="view" id="viewPay" hidden></section>
+  <section class="view" id="viewSettings" hidden></section>
+</main>
+
+<nav class="tabs" id="tabs" hidden>
+  <button class="tab on" data-act="tab" data-tab="today">Today</button>
+  <button class="tab" data-act="tab" data-tab="pay">Pay</button>
+  <button class="tab" data-act="tab" data-tab="settings">Settings</button>
+</nav>
+
+<!-- ── counter (full screen while a tasting runs) ───────── -->
+<div class="counter" id="counter" hidden>
+  <!-- Finish is a full-width button of its own, at the top: easy to see, far from the count boxes. -->
+  <div class="c-head">
+    <div class="c-top">
+      <div class="c-title">
+        <b id="cStore"></b>
+        <span id="cTime"></span>
+      </div>
+      <button class="c-btn" data-act="lock">Lock</button>
+    </div>
+    <!-- The two ways off this screen: look at the day (the tasting keeps running), or finish. -->
+    <div class="c-acts">
+      <button class="c-btn c-day" data-act="showDay">My day</button>
+      <button class="c-finish" id="cFinish" data-act="finish">Finish tasting</button>
+    </div>
+  </div>
+
+  <div class="c-status" id="cStatus"></div>
+
+  <!-- Always here and always the same height, so the count boxes below never move or resize.
+       Before the first count it shows the shift and offers "wrong store or times"; then the last
+       count; for a few seconds after a minus it puts that count back. -->
+  <div class="c-undo">
+    <button class="c-undo-btn" id="cBack" data-act="lineTap" disabled><span id="cBackT">No counts yet</span></button>
+  </div>
+
+  <div class="c-band">
+    <div><span>Interactions</span><b id="cTalk">0</b></div>
+    <div><span>Samples</span><b id="cSam">0</b></div>
+    <div><span>Sold</span><b id="cSold">0</b></div>
+  </div>
+
+  <!-- The count rows are drawn by the app, one row per count: "Rejected or ignored" first, then
+       one row for each flavour (or one row for the product when it has no flavours). A flavour's
+       row holds Sold on the left and its samples, the count tapped most, on the right under the
+       thumb. Every count has its own "−" beside it. The rows are sized once per tasting and
+       never move or change size while counting. -->
+  <div class="c-pad" id="cPad"></div>
+
+  <div class="c-cover" id="cCover" hidden>
+    <p class="c-cover-t" id="cCoverT">Locked</p>
+    <p class="c-cover-s" id="cCoverS"></p>
+    <div class="slide" id="cSlide">
+      <span class="slide-l">Slide to unlock</span>
+      <div class="slide-thumb" id="cThumb" aria-label="Slide to unlock"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ── sheet ───────────────────────────────────────────── -->
+<div class="scrim" id="scrim" hidden></div>
+<div class="sheet" id="sheet" hidden role="dialog" aria-modal="true">
+  <div class="sheet-grip"></div>
+  <div class="sheet-head">
+    <h3 id="sheetTitle"></h3>
+    <button class="icon-btn" data-act="closeSheet" aria-label="Close">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg>
+    </button>
+  </div>
+  <div class="sheet-body" id="sheetBody"></div>
+</div>
+
+<div class="toast" id="toast" hidden></div>
+
+<script type="module" src="/app.js?v=6"></script>
+</body>
+</html>

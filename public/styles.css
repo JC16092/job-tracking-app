@@ -1,0 +1,774 @@
+/* ══════════════════════════════════════════════════════════
+   Tastings — Memphis, violet-led. Light only, by choice.
+   Sibling to Pace and Hours: same 3px edges, same hard
+   shadows, same press. Violet lead on a pale lilac ground so
+   the three apps can be told apart on the Home Screen.
+   ══════════════════════════════════════════════════════════ */
+
+:root{
+  --bg:#F6F1FF;
+  --card:#FFFFFF;
+  --edge:#111111;
+  --ink:#111111;
+  --ink-2:#5A5566;
+  --ink-3:#8C8799;
+
+  --violet:#9B5DE5;
+  --blue:#2B4CF2;
+  --pink:#E8365D;
+  --green:#3DD68C;
+  --yellow:#FFB800;
+
+  --lead:var(--violet);
+  --bad:#E8365D;
+  --amber:#FFB800;
+  --amber-ink:#7A4F00;
+  --rest:#EFE8FB;
+
+  /* text ON a colour block: bright fills take near-black,
+     deep fills take white. Never guess this per-component. */
+  --on-bright:#111111;
+  --on-deep:#FFFFFF;
+
+  --bw:3px;
+  --sh:3px 3px 0 var(--edge);
+  --sh-lg:5px 5px 0 var(--edge);
+  --col:520px;
+  --gut:16px;
+  --tabh:calc(56px + env(safe-area-inset-bottom));
+
+  color-scheme:light;
+}
+
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+[hidden]{display:none!important}
+html,body{margin:0;padding:0}
+body{
+  background:var(--bg);
+  color:var(--ink);
+  font-family:Rubik,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  font-size:15px;
+  line-height:1.45;
+  -webkit-font-smoothing:antialiased;
+  -webkit-text-size-adjust:100%;
+}
+h1,h2,h3{margin:0;font-weight:800;letter-spacing:-.02em}
+p{margin:0}
+button{font:inherit;color:inherit;touch-action:manipulation}
+a{color:inherit;touch-action:manipulation}
+/* 16px or more on every field, or iPhone zooms the page on focus */
+input,select,textarea{font:inherit;color:inherit;font-size:16px;border-radius:0;-webkit-appearance:none;appearance:none}
+
+/* ── boot ─────────────────────────────────────────────── */
+.boot{position:fixed;inset:0;display:grid;place-items:center;background:var(--bg);z-index:60}
+.boot-mark{
+  width:54px;height:54px;border:var(--bw) solid var(--edge);background:var(--lead);
+  box-shadow:var(--sh);animation:tick 1.1s steps(4) infinite;
+}
+@keyframes tick{to{transform:rotate(360deg)}}
+@media (prefers-reduced-motion:reduce){.boot-mark{animation:none}}
+
+/* ── gate ─────────────────────────────────────────────── */
+.gate{min-height:100dvh;display:grid;place-items:center;padding:var(--gut)}
+.gate-card{
+  position:relative;width:100%;max-width:400px;background:var(--card);
+  border:var(--bw) solid var(--edge);box-shadow:var(--sh-lg);
+  padding:34px 24px 26px;text-align:center;overflow:hidden;
+}
+.gate-orb{
+  position:absolute;top:-38px;right:-38px;width:110px;height:110px;border-radius:50%;
+  background:repeating-linear-gradient(45deg,var(--lead) 0 9px,transparent 9px 18px);
+  border:var(--bw) solid var(--edge);
+}
+.gate-card h1{font-size:40px;margin-bottom:6px}
+.gate-card > p{color:var(--ink-2);margin-bottom:22px;font-weight:500}
+.gate-note{margin-top:14px;font-size:13px;color:var(--pink);font-weight:600;min-height:18px}
+.install{
+  text-align:left;border:var(--bw) solid var(--edge);background:var(--yellow);color:var(--on-bright);
+  padding:12px 14px;margin-bottom:16px;font-weight:500;font-size:14px;
+}
+.install-t{font-weight:800;margin-bottom:4px}
+.install ol{margin:0 0 8px;padding-left:20px}
+.install .linkish{color:var(--on-bright)}
+
+/* ── shell ────────────────────────────────────────────── */
+.app{
+  max-width:var(--col);margin:0 auto;display:grid;gap:14px;
+  padding:calc(var(--gut) + env(safe-area-inset-top)) var(--gut) calc(var(--tabh) + 28px);
+}
+.top{display:flex;align-items:center;justify-content:space-between;padding-top:6px}
+.top h1{font-size:30px}
+.view{display:grid;gap:14px}
+.pill{
+  border:var(--bw) solid var(--edge);padding:3px 10px;font-size:12px;font-weight:800;
+  letter-spacing:.06em;text-transform:uppercase;background:var(--card);
+}
+.pill-demo{background:var(--pink);color:var(--on-deep)}
+.icon-btn{
+  width:42px;height:42px;display:grid;place-items:center;cursor:pointer;flex:none;
+  background:var(--card);border:var(--bw) solid var(--edge);box-shadow:var(--sh);
+}
+.icon-btn svg{width:20px;height:20px}
+.icon-btn:active{transform:translate(3px,3px);box-shadow:0 0 0 var(--edge)}
+
+.bar{
+  display:flex;align-items:center;justify-content:space-between;gap:10px;
+  border:var(--bw) solid var(--edge);padding:9px 12px;font-weight:700;font-size:14px;
+}
+.bar-update{background:var(--green);color:var(--on-bright)}
+.bar-sign{background:var(--yellow);color:var(--on-bright)}
+.bar-bad{background:var(--bad);color:var(--on-deep)}
+
+/* ── buttons ──────────────────────────────────────────── */
+.btn{
+  border:var(--bw) solid var(--edge);box-shadow:var(--sh);cursor:pointer;
+  padding:12px 18px;font-weight:800;letter-spacing:-.01em;background:var(--card);
+  transition:transform .04s,box-shadow .04s;text-decoration:none;display:inline-block;text-align:center;
+}
+.btn:active{transform:translate(3px,3px);box-shadow:0 0 0 var(--edge)}
+.btn[disabled]{opacity:.45;cursor:default}
+.btn-primary{background:var(--lead);color:var(--on-deep)}
+.btn-go{background:var(--green);color:var(--on-bright)}
+.btn-ghost{background:var(--card);color:var(--ink)}
+.btn-danger{background:var(--pink);color:var(--on-deep)}
+.btn-big{width:100%;padding:16px;font-size:17px}
+.btn-sm{padding:6px 12px;font-size:13px;box-shadow:2px 2px 0 var(--edge)}
+.btn-sm:active{transform:translate(2px,2px)}
+.linkish{
+  background:none;border:0;box-shadow:none;padding:0;cursor:pointer;
+  font-size:13px;font-weight:700;color:var(--blue);text-decoration:underline;justify-self:start;
+}
+/* press and hold: the fill shows how long is left */
+.hold{position:relative;overflow:hidden}
+.hold::after{
+  content:"";position:absolute;left:0;top:0;bottom:0;width:0;background:rgba(17,17,17,.28);
+}
+.hold.holding::after{width:100%;transition:width var(--hold,1s) linear}
+
+/* ── panels ───────────────────────────────────────────── */
+.panel{background:var(--card);border:var(--bw) solid var(--edge);box-shadow:var(--sh);padding:14px}
+.panel-head{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:12px}
+.panel-head h2{font-size:17px;flex:1}
+.panel-foot{margin-top:10px;font-size:13px;color:var(--ink-2);font-weight:500}
+.panel.lead{box-shadow:var(--sh-lg)}
+
+.nav-btn{
+  width:38px;height:38px;display:grid;place-items:center;cursor:pointer;flex:none;
+  background:var(--card);border:var(--bw) solid var(--edge);box-shadow:2px 2px 0 var(--edge);
+}
+.nav-btn svg{width:16px;height:16px}
+.nav-btn:active{transform:translate(2px,2px);box-shadow:0 0 0 var(--edge)}
+
+/* date line */
+.dateline{display:flex;align-items:center;gap:10px}
+.datepick{position:relative;flex:1;text-align:center;font-size:20px;font-weight:800;letter-spacing:-.02em;padding:4px 0}
+.datepick input{position:absolute;inset:0;width:100%;height:100%;opacity:0;cursor:pointer}
+.dateline-s{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:10px;flex-wrap:wrap}
+.paidas{
+  border:var(--bw) solid var(--edge);background:var(--lead);color:var(--on-deep);
+  padding:6px 10px;font-weight:800;font-size:13px;cursor:pointer;text-align:left;
+}
+.paidas.hol{background:var(--pink)}
+.paidas.set{background:var(--yellow);color:var(--on-bright)}
+.paidas:active{transform:translate(2px,2px)}
+
+/* ── rows ─────────────────────────────────────────────── */
+.rows{display:grid;gap:8px}
+.row{
+  display:flex;align-items:center;gap:10px;width:100%;text-align:left;
+  border:var(--bw) solid var(--edge);background:var(--card);padding:10px 12px;
+}
+button.row{cursor:pointer}
+button.row:active{transform:translate(2px,2px)}
+.row-main{flex:1;min-width:0}
+.row-t{font-weight:700;font-size:15px;overflow-wrap:anywhere}
+.row-s{font-size:12px;color:var(--ink-2);font-weight:500}
+.row-v{font-weight:800;font-variant-numeric:tabular-nums;white-space:nowrap}
+.row.start{background:var(--green);color:var(--on-bright);padding:15px 14px;box-shadow:var(--sh)}
+.row.start .row-t{font-size:17px;font-weight:800}
+.row.start .row-s{color:var(--on-bright);opacity:.75}
+.row.live{background:var(--pink);color:var(--on-deep);box-shadow:var(--sh)}
+.row.live .row-s{color:var(--on-deep);opacity:.85}
+.row.bad{border-color:var(--bad)}
+/* a tasting on Today: the card opens it; a planned one also carries its own Start button */
+.vcard{border:var(--bw) solid var(--edge);background:var(--card)}
+.vcard.bad{border-color:var(--bad)}
+.vcard.live{background:var(--pink);color:var(--on-deep);box-shadow:var(--sh)}
+.vcard.live .row-s{color:var(--on-deep);opacity:.85}
+.vcard-open{
+  display:flex;align-items:center;gap:10px;width:100%;text-align:left;
+  border:0;background:none;color:inherit;padding:10px 12px;cursor:pointer;
+}
+.vcard-open:active{transform:translate(2px,2px)}
+.vcard-go{display:block;width:calc(100% - 24px);margin:2px 12px 12px;padding:13px;font-size:16px}
+.empty{color:var(--ink-2);font-weight:500;font-size:14px;padding:4px 0}
+.newstore{display:grid;grid-template-columns:1fr auto;gap:8px;margin-top:8px}
+.newstore input{padding:11px 12px;border:var(--bw) solid var(--edge);background:var(--card);font-weight:600;min-width:0}
+
+/* trips */
+.leg{
+  display:grid;grid-template-columns:1fr auto auto;gap:8px;align-items:center;
+  border:var(--bw) solid var(--edge);padding:9px 10px;background:var(--card);
+}
+.leg.miss{background:#FFF1D0}
+.leg.skip{background:var(--rest)}
+.leg.skip .leg-t{text-decoration:line-through;color:var(--ink-2)}
+.leg-t{font-weight:700;font-size:14px;overflow-wrap:anywhere}
+.leg-s{display:block;font-size:12px;color:var(--ink-2);font-weight:500}
+.leg-s.warn{color:var(--amber-ink);font-weight:700}
+.km{
+  width:82px;padding:9px 8px;border:var(--bw) solid var(--edge);background:var(--card);
+  font-weight:800;text-align:right;font-variant-numeric:tabular-nums;
+}
+.km:disabled{background:var(--rest);color:var(--ink-3)}
+.leg-foot{grid-column:1 / -1;display:flex;justify-content:space-between;gap:10px;align-items:center}
+.hint{font-size:13px;color:var(--ink-2);font-weight:500}
+
+/* totals */
+.sum{display:grid;gap:6px}
+.sum-row{display:flex;justify-content:space-between;gap:10px;align-items:baseline;font-weight:600}
+.sum-row small{display:block;color:var(--ink-2);font-weight:500;font-size:12px}
+.sum-row b{font-variant-numeric:tabular-nums;white-space:nowrap}
+.sum-total{
+  display:flex;justify-content:space-between;align-items:baseline;gap:10px;margin-top:8px;
+  border:var(--bw) solid var(--edge);background:var(--yellow);color:var(--on-bright);padding:10px 12px;
+}
+.sum-total span{font-weight:800;font-size:13px;letter-spacing:.04em;text-transform:uppercase}
+.sum-total b{font-size:26px;font-weight:800;letter-spacing:-.03em;font-variant-numeric:tabular-nums}
+.warns{display:grid;gap:6px;margin-top:10px}
+.warn-row{
+  border:var(--bw) solid var(--edge);background:#FFF1D0;color:var(--amber-ink);
+  padding:8px 10px;font-weight:700;font-size:13px;text-align:left;width:100%;
+}
+button.warn-row{cursor:pointer}
+.syncline{text-align:center;font-size:12px;color:var(--ink-3);font-weight:600}
+
+/* chips */
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{
+  border:var(--bw) solid var(--edge);background:var(--card);padding:8px 12px;
+  font-weight:800;font-size:14px;cursor:pointer;
+}
+.chip.on{background:var(--lead);color:var(--on-deep)}
+.chip:active{transform:translate(2px,2px)}
+.seg{display:grid;grid-template-columns:1fr 1fr;border:var(--bw) solid var(--edge)}
+.seg button{border:0;background:var(--card);padding:10px;font-weight:800;cursor:pointer}
+.seg button + button{border-left:var(--bw) solid var(--edge)}
+.seg button.on{background:var(--lead);color:var(--on-deep)}
+
+/* ── tabs ─────────────────────────────────────────────── */
+.tabs{
+  position:fixed;left:0;right:0;bottom:0;z-index:30;
+  display:grid;grid-template-columns:repeat(3,1fr);
+  padding:0 0 env(safe-area-inset-bottom);
+  max-width:var(--col);margin:0 auto;
+  background:var(--card);border-top:var(--bw) solid var(--edge);
+}
+.tab{
+  display:flex;align-items:center;justify-content:center;border:0;background:none;cursor:pointer;
+  padding:18px 0 17px;color:var(--ink-2);
+  font-size:11px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;
+  border-right:2px solid var(--edge);
+}
+.tab:last-child{border-right:0}
+.tab.on{background:var(--lead);color:var(--on-deep)}
+
+/* ── sheet ────────────────────────────────────────────── */
+.scrim{position:fixed;inset:0;background:rgba(17,17,17,.45);z-index:70}
+.sheet{
+  position:fixed;left:0;right:0;bottom:0;z-index:71;max-height:92dvh;overflow-y:auto;
+  background:var(--card);border-top:var(--bw) solid var(--edge);
+  max-width:var(--col);margin:0 auto;-webkit-overflow-scrolling:touch;overscroll-behavior:contain;
+  padding:0 var(--gut) calc(22px + env(safe-area-inset-bottom));
+  animation:rise .16s ease-out;
+}
+@keyframes rise{from{transform:translateY(16px)}to{transform:none}}
+@media (prefers-reduced-motion:reduce){.sheet{animation:none}}
+.sheet-grip{width:52px;height:5px;background:var(--edge);margin:10px auto 6px}
+.sheet-head{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:4px 0 14px}
+.sheet-head h3{font-size:20px;overflow-wrap:anywhere}
+.sheet-body{display:grid;gap:14px}
+
+.f{display:grid;gap:6px}
+.f label,.lab{font-size:12px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-2)}
+.f input,.f select,.f textarea{
+  width:100%;padding:11px 12px;background:var(--card);
+  border:var(--bw) solid var(--edge);font-weight:600;min-width:0;
+}
+.f input:focus,.f select:focus,.km:focus,.newstore input:focus{outline:3px solid var(--blue);outline-offset:1px}
+.f-row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.f-hint{font-size:13px;color:var(--ink-2);font-weight:500}
+.f-actions{display:flex;gap:10px;padding-top:2px;flex-wrap:wrap}
+.f-actions .btn{flex:1}
+.note{border:var(--bw) solid var(--edge);padding:10px 12px;font-weight:600;font-size:14px;display:grid;gap:8px}
+.note.bad{background:var(--bad);color:var(--on-deep)}
+.note.warn{background:#FFF1D0;color:var(--amber-ink)}
+.note.ask{background:var(--rest)}
+
+/* visit sheet */
+.vs-nums{display:grid;gap:8px}
+.vs-talk{
+  display:flex;justify-content:space-between;align-items:baseline;
+  border:var(--bw) solid var(--edge);background:var(--lead);color:var(--on-deep);padding:10px 14px;
+}
+.vs-talk span{font-weight:800;font-size:13px;letter-spacing:.04em;text-transform:uppercase}
+.vs-talk b{font-size:34px;font-weight:800;letter-spacing:-.03em;font-variant-numeric:tabular-nums}
+.vs-adj{display:flex;justify-content:space-between;align-items:center;gap:10px;font-weight:700}
+.stepper{display:grid;grid-template-columns:46px 76px 46px}
+.stepper button{
+  border:var(--bw) solid var(--edge);background:var(--card);font-size:22px;font-weight:800;cursor:pointer;height:46px;
+}
+.stepper button:active{background:var(--rest)}
+.stepper input{
+  border:var(--bw) solid var(--edge);border-left:0;border-right:0;text-align:center;font-weight:800;
+  font-size:20px;height:46px;width:100%;padding:0;background:var(--card);font-variant-numeric:tabular-nums;
+}
+.vs-paid{border:var(--bw) solid var(--edge);padding:12px;display:grid;gap:12px;background:var(--card)}
+.vs-paid.amber{background:#FFF1D0}
+.vs-paidline{font-weight:700;font-size:15px}
+.vs-paidline b{font-size:18px}
+.tstep{display:grid;grid-template-columns:58px 1fr 58px}
+.tstep button{border:var(--bw) solid var(--edge);background:var(--card);font-weight:800;cursor:pointer;font-size:14px}
+.tstep button:active{background:var(--rest)}
+.tstep input{border-left:0!important;border-right:0!important;text-align:center}
+
+/* ── toast ────────────────────────────────────────────── */
+.toast{
+  position:fixed;left:50%;bottom:calc(var(--tabh) + 18px);transform:translateX(-50%);z-index:95;
+  background:var(--edge);color:#fff;font-weight:800;font-size:14px;
+  padding:11px 18px;border:var(--bw) solid var(--edge);box-shadow:var(--sh);
+  max-width:calc(100vw - 32px);text-align:center;
+}
+.build{text-align:center;font-size:11px;color:var(--ink-3);font-weight:600}
+.switch{display:flex;align-items:center;justify-content:space-between;gap:12px;font-weight:700}
+.switch button{
+  width:64px;height:36px;border:var(--bw) solid var(--edge);background:var(--rest);position:relative;cursor:pointer;flex:none;
+}
+.switch button::after{
+  content:"";position:absolute;top:3px;left:3px;width:24px;height:24px;background:var(--edge);transition:left .08s;
+}
+.switch button.on{background:var(--green)}
+.switch button.on::after{left:31px}
+
+/* ══════════════════════════════════════════════════════════
+   COUNTER — the working screen. Nothing here scrolls, zooms
+   or moves. Buttons keep clear of the screen edges.
+   ══════════════════════════════════════════════════════════ */
+body.counting{overflow:hidden;overscroll-behavior:none;position:fixed;inset:0;width:100%}
+.counter{
+  position:fixed;inset:0;z-index:50;background:var(--bg);
+  height:100dvh;display:flex;flex-direction:column;gap:8px;
+  padding:calc(10px + env(safe-area-inset-top)) calc(24px + env(safe-area-inset-right))
+          calc(24px + env(safe-area-inset-bottom)) calc(24px + env(safe-area-inset-left));
+  touch-action:none;overscroll-behavior:none;
+  -webkit-user-select:none;user-select:none;-webkit-touch-callout:none;
+}
+.c-head{flex:none;display:flex;flex-direction:column;gap:8px}
+.c-top{display:flex;align-items:center;gap:10px;flex:none}
+.c-btn{
+  border:var(--bw) solid var(--edge);background:var(--card);box-shadow:2px 2px 0 var(--edge);
+  padding:9px 14px;font-weight:800;cursor:pointer;flex:none;
+}
+.c-btn:active{transform:translate(2px,2px);box-shadow:0 0 0 var(--edge)}
+/* Finish: full width and pink, the family's colour for "stop the clock" (as in Hours). */
+.c-finish{
+  width:100%;border:var(--bw) solid var(--edge);background:var(--pink);color:var(--on-deep);
+  box-shadow:var(--sh);font-weight:800;font-size:18px;letter-spacing:-.01em;padding:12px 16px;cursor:pointer;
+  transition:transform .04s,box-shadow .04s;
+}
+.c-finish:active{transform:translate(3px,3px);box-shadow:0 0 0 var(--edge)}
+.c-title{flex:1;min-width:0;text-align:left;line-height:1.2}
+.c-title b{display:block;font-size:16px;font-weight:800;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.c-title span{font-size:13px;color:var(--ink-2);font-weight:600;font-variant-numeric:tabular-nums}
+.c-status{flex:none;text-align:center;font-size:12px;font-weight:700;color:var(--ink-2);min-height:17px}
+.c-status.bad{background:var(--bad);color:var(--on-deep);padding:6px;border:var(--bw) solid var(--edge)}
+.c-undo{flex:none;display:flex;gap:8px}
+.c-undo-btn{
+  flex:1;border:var(--bw) solid var(--edge);background:var(--card);padding:11px 12px;min-height:48px;
+  font-weight:700;font-size:14px;cursor:pointer;text-align:left;position:relative;overflow:hidden;
+}
+.c-undo-btn:disabled{color:var(--ink-3);border-color:var(--ink-3)}
+.c-undo-btn.can{background:var(--violet);color:var(--on-deep);font-weight:800}
+/* The same height whatever it says (one line or two), so the count boxes below never move. */
+#cBack{height:56px;min-height:0;padding:0 12px;display:flex;align-items:center;line-height:1.25}
+#cBack:disabled{color:var(--ink-2);border-color:var(--edge);cursor:default}
+#cBack.start{color:var(--ink);font-weight:600}
+.c-band{
+  flex:none;display:grid;grid-template-columns:1fr 1fr 1.25fr;gap:0;text-align:center;
+  border:var(--bw) solid var(--edge);background:var(--card);padding:8px 4px;
+}
+.c-band span{display:block;font-size:11px;font-weight:800;letter-spacing:.04em;text-transform:uppercase;color:var(--ink-2)}
+.c-band b{font-size:26px;font-weight:800;letter-spacing:-.03em;font-variant-numeric:tabular-nums;line-height:1.1}
+.c-pad{flex:1;min-height:0;display:flex;flex-direction:column;gap:12px}
+/* One box per count. The narrow white strip on the left takes one off; the rest of the box,
+   in colour, adds one. The strip sits on the far side from a right thumb and is told apart by
+   its colour and its divider, so a hurried tap lands on "add". */
+.c-box{
+  flex:1;min-height:120px;display:flex;border:var(--bw) solid var(--edge);box-shadow:var(--sh-lg);
+  color:var(--on-bright);transition:transform .04s,box-shadow .04s;
+}
+.c-no{background:var(--yellow)}
+.c-yes{background:var(--green)}
+.c-minus{
+  flex:none;width:72px;border:0;border-right:var(--bw) solid var(--edge);background:var(--card);color:var(--ink);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;
+  cursor:pointer;touch-action:none;padding:0;
+}
+.c-minus span{font-size:44px;font-weight:800;line-height:1}
+.c-minus small{font-size:11px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-2)}
+.c-minus:disabled{background:var(--rest);color:var(--ink-3);cursor:default;pointer-events:none}
+.c-minus:disabled small{color:var(--ink-3)}
+.c-minus:active:not(:disabled){background:var(--rest)}
+.c-count{
+  flex:1;min-width:0;border:0;background:transparent;color:inherit;cursor:pointer;touch-action:none;
+  display:flex;align-items:center;justify-content:space-between;gap:10px;padding:0 18px;
+}
+.c-count span{font-size:21px;font-weight:800;letter-spacing:-.02em;text-align:left}
+.c-count b{font-size:60px;font-weight:800;letter-spacing:-.04em;font-variant-numeric:tabular-nums;line-height:1}
+.c-box.hit{transform:translate(5px,5px);box-shadow:0 0 0 var(--edge);filter:brightness(1.18)}
+.c-box.hit .c-count b{transform:scale(1.12)}
+.c-box.off .c-count b{transform:scale(.86)}
+.c-box.off .c-minus{background:var(--edge);color:#fff}
+.c-box.off .c-minus small{color:#fff}
+@media (orientation:landscape) and (max-height:520px){
+  .c-head{flex-direction:row;align-items:center;gap:12px}
+  .c-head .c-top{flex:1;min-width:0}
+  .c-finish{width:auto;flex:none;font-size:15px;padding:9px 18px}
+  .c-pad{flex-direction:row}
+  .c-box{min-height:0}
+  .c-minus{width:60px}
+  .c-count b{font-size:44px}
+  .c-band b{font-size:20px}
+}
+
+.c-cover{
+  position:absolute;inset:0;z-index:5;background:#111;color:#fff;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;
+  padding:24px calc(24px + env(safe-area-inset-right)) calc(40px + env(safe-area-inset-bottom)) calc(24px + env(safe-area-inset-left));
+  text-align:center;
+}
+.c-cover-t{font-size:26px;font-weight:800}
+.c-cover-s{font-size:15px;color:#C9C4D6;font-weight:500;min-height:22px}
+.slide{
+  position:relative;width:min(100%,340px);height:64px;border:var(--bw) solid #fff;margin-top:14px;
+  display:grid;place-items:center;touch-action:none;
+}
+.slide-l{font-weight:800;color:#C9C4D6;letter-spacing:.02em;padding-left:56px}
+.slide-thumb{
+  position:absolute;left:3px;top:3px;width:58px;height:52px;background:var(--green);
+  border:var(--bw) solid #fff;cursor:grab;touch-action:none;
+}
+
+/* ══════════════════════════════════════════════════════════
+   Version 5 — the day as a timeline, the "next step" card,
+   the short Finish screen, reports, the month, help.
+   ══════════════════════════════════════════════════════════ */
+.top h1{flex:1}
+.top .pill{margin-right:10px}
+.help-btn{font-weight:800;font-size:20px;line-height:1}
+.ok-row{
+  border:var(--bw) solid var(--edge);background:#DDF7E9;color:#0B5B36;
+  padding:8px 10px;font-weight:700;font-size:13px;text-align:left;width:100%;
+}
+.row-s.warn{color:var(--amber-ink);font-weight:700}
+
+/* the next step: one card, one big button */
+.panel.next{box-shadow:var(--sh-lg)}
+.next-k{font-size:12px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-2)}
+.next-t{font-size:22px;font-weight:800;letter-spacing:-.02em;line-height:1.2;overflow-wrap:anywhere;margin-top:2px}
+.next-s{font-size:14px;font-weight:600;color:var(--ink-2);margin-top:2px}
+.next-btns{display:grid;grid-template-columns:auto 1fr;gap:10px;margin-top:12px}
+.next-btns .btn{padding:14px 16px;font-size:16px}
+.next-btns .btn:only-child{grid-column:1 / -1}
+.next .btn-big{margin-top:12px}
+.next.live{background:var(--pink);color:var(--on-deep)}
+.next.live .next-k,.next.live .next-s{color:var(--on-deep);opacity:.9}
+.next.done{background:#DDF7E9}
+
+/* the first-time guide */
+.setup .row{padding:8px 10px}
+.setup .row.done{background:var(--rest)}
+.setup .row.done .row-t{color:var(--ink-2);text-decoration:line-through}
+.step-n{
+  width:28px;height:28px;flex:none;display:grid;place-items:center;
+  border:var(--bw) solid var(--edge);font-weight:800;font-size:14px;background:var(--card);
+}
+.row.done .step-n{background:var(--green)}
+
+/* the day, top to bottom: home, trip, tasting, trip, tasting, trip, home */
+.tl{position:relative;display:grid;gap:8px;padding-left:20px}
+.tl::before{content:"";position:absolute;left:5px;top:8px;bottom:8px;width:3px;background:var(--edge)}
+.tl-home{
+  position:relative;font-size:12px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-2);line-height:16px;
+}
+.tl-home::before{
+  content:"";position:absolute;left:-20px;top:1px;width:13px;height:13px;background:var(--lead);border:var(--bw) solid var(--edge);
+}
+.tl .km{width:74px}
+.leg.inwhole .leg-t{text-decoration:none}
+.leg.daykm{margin-top:10px;background:var(--rest);border-style:dashed}
+.leg.daykm.on{background:#DDF7E9;border-style:solid}
+
+/* the pay week in one line, under the day */
+.weekline{
+  display:grid;grid-template-columns:1fr auto;gap:2px 10px;align-items:baseline;width:100%;text-align:left;cursor:pointer;
+  border:var(--bw) solid var(--edge);background:var(--card);box-shadow:var(--sh);padding:12px 14px;
+}
+.weekline:active{transform:translate(3px,3px);box-shadow:0 0 0 var(--edge)}
+.weekline span{font-weight:800;font-size:13px;letter-spacing:.04em;text-transform:uppercase}
+.weekline b{font-size:20px;font-weight:800;letter-spacing:-.02em;font-variant-numeric:tabular-nums}
+.weekline small{grid-column:1 / -1;font-size:12px;font-weight:600;color:var(--ink-2)}
+
+/* a month at a glance */
+.cal-head{display:grid;grid-template-columns:repeat(7,1fr);text-align:center;font-size:11px;font-weight:800;color:var(--ink-2);margin-bottom:4px}
+.cal{display:grid;grid-template-columns:repeat(7,1fr);gap:4px}
+.cell{
+  min-width:0;height:44px;padding:0;cursor:pointer;background:var(--card);border:2px solid var(--rest);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px;
+}
+.cell.pad{border:0;background:none;cursor:default}
+.cell-d{font-weight:800;font-size:13px;line-height:1}
+.cell-v{font-size:10px;font-weight:700;color:var(--ink-2);line-height:1;min-height:10px;font-variant-numeric:tabular-nums}
+.cell.has{border-color:var(--edge);background:var(--rest)}
+.cell.fix{border-color:var(--edge);background:#FFF1D0}
+.cell.hol .cell-d{color:var(--pink)}
+.cell.today{outline:3px solid var(--blue);outline-offset:1px}
+.cell:active{transform:translate(1px,1px)}
+.mo-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:12px}
+.stat{border:var(--bw) solid var(--edge);padding:8px 4px;text-align:center;min-width:0}
+.stat-v{font-weight:800;font-size:14px;font-variant-numeric:tabular-nums;overflow-wrap:anywhere}
+.stat-l{font-size:10px;font-weight:800;letter-spacing:.04em;text-transform:uppercase;color:var(--ink-2)}
+
+/* the short Finish screen */
+.vf{border:var(--bw) solid var(--edge);background:var(--card)}
+.vf-big{display:flex;justify-content:space-between;align-items:baseline;gap:10px;background:var(--lead);color:var(--on-deep);padding:10px 14px}
+.vf-big span,.vf-two span{font-weight:800;font-size:12px;letter-spacing:.04em;text-transform:uppercase}
+.vf-big b{font-size:40px;font-weight:800;letter-spacing:-.03em;font-variant-numeric:tabular-nums;line-height:1.1}
+.vf-two{display:grid;grid-template-columns:1fr 1fr;border-top:var(--bw) solid var(--edge)}
+.vf-two div{padding:10px 14px;display:flex;flex-direction:column;justify-content:space-between;gap:2px}
+.vf-two div + div{border-left:var(--bw) solid var(--edge)}
+.vf-two span{color:var(--ink-2)}
+.vf-two b{font-size:28px;font-weight:800;letter-spacing:-.03em;font-variant-numeric:tabular-nums;line-height:1.1}
+.vf-shift{border-top:var(--bw) solid var(--edge);padding:10px 14px;font-weight:700}
+.btn-finish{background:var(--pink);color:var(--on-deep)}
+.more-link{justify-self:center;padding:8px 4px;font-size:14px}
+.vs-more{display:grid;gap:14px}
+
+/* a report, as it will be sent */
+pre.report{
+  margin:0;border:var(--bw) solid var(--edge);background:var(--rest);padding:12px;
+  font:inherit;font-weight:600;font-size:14px;white-space:pre-wrap;overflow-wrap:anywhere;
+  -webkit-user-select:text;user-select:text;
+}
+.steps{margin:0;padding-left:22px;display:grid;gap:6px;font-weight:600}
+.help{display:grid;gap:8px}
+.help-i{border:var(--bw) solid var(--edge);padding:10px 12px}
+.help-q{font-weight:800}
+.help-a{font-size:14px;font-weight:500;margin-top:2px}
+.meter{height:16px;border:var(--bw) solid var(--edge);background:var(--rest)}
+.meter-bar{height:100%;background:var(--green)}
+.meter-bar.hi{background:var(--yellow)}
+.meter + .hint{margin-top:6px}
+.f input[type=file]{padding:9px;font-size:14px;font-weight:600}
+
+/* the Counter: "My day" sits beside Finish; the line under the store name stays one line */
+.c-acts{display:flex;gap:8px;align-items:stretch}
+.c-acts .c-finish{flex:1;width:auto;min-width:0}
+.c-day{box-shadow:var(--sh);padding:12px 14px;font-size:15px}
+.c-day:active{transform:translate(3px,3px)}
+.c-title span{display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.c-band{grid-template-columns:1fr 1fr 1.5fr;align-items:end}
+@media (orientation:landscape) and (max-height:520px){
+  .c-acts{flex:none}
+  .c-day{padding:9px 12px;font-size:14px}
+}
+.c-count span{font-size:20px;line-height:1.15}
+/* the shift's typed end has passed: the Finish button asks for attention */
+.c-finish.due{outline:4px solid var(--yellow);outline-offset:2px;animation:due 1.4s steps(1) 20}
+@keyframes due{50%{background:var(--yellow);color:var(--on-bright)}}
+@media (prefers-reduced-motion:reduce){.c-finish.due{animation:none}}
+
+/* a trip: its name on a line of its own, then the note, the km box and the Maps button */
+.leg{gap:6px 8px}
+.leg > .leg-t{grid-column:1 / -1}
+.leg > .leg-s{align-self:center}
+.leg-foot .linkish{font-size:12px}
+
+/* big numbers and narrow phones: the count always stays inside its box */
+.c-count span{flex:0 1 auto;min-width:0}
+.c-count b{flex:none}
+.c-count b.wide{font-size:46px}
+@media (max-width:350px){
+  .counter{padding-left:calc(16px + env(safe-area-inset-left));padding-right:calc(16px + env(safe-area-inset-right))}
+  .c-minus{width:60px}
+  .c-count{padding:0 12px}
+  .c-count span{font-size:17px}
+  .c-count b{font-size:52px}
+  .c-count b.wide{font-size:42px}
+}
+@media (orientation:landscape) and (max-height:520px){
+  .c-count b.wide{font-size:36px}
+}
+
+/* the Counter's status line is always exactly one line, whatever it says: the count boxes below never move */
+.c-status{height:17px;line-height:17px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.c-status.bad{padding:0 6px;border:0;background:var(--bad);color:var(--on-deep)}
+
+
+/* ══════════════════════════════════════════════════════════
+   Version 6 — flavours and Sold on the Counter; the payslip.
+   The Counter's count rows are drawn by the app (see buildPad
+   in app.js): #cPad > .c-row > .c-box > .c-cell (one per count:
+   its "−" and its add area). Everything here is under #cPad so
+   it wins over the older two-box rules above.
+   ══════════════════════════════════════════════════════════ */
+#cPad{flex:1;min-height:0;display:grid;grid-auto-rows:1fr;gap:8px}
+#cPad .c-row{min-height:0;min-width:0;display:flex}
+#cPad .c-box{
+  flex:1;min-height:0;min-width:0;display:flex;background:var(--card);color:var(--on-bright);
+  border:var(--bw) solid var(--edge);box-shadow:var(--sh);transform:none;filter:none;
+}
+#cPad .c-cell{flex:1;min-width:0;min-height:0;display:flex;transition:filter .04s}
+#cPad .c-cell + .c-cell{border-left:var(--bw) solid var(--edge)}
+#cPad .c-cell.c-no{background:var(--yellow)}
+#cPad .c-cell.c-yes{background:var(--green)}
+#cPad .c-cell.c-sold{flex:0 0 30%;background:var(--blue);color:var(--on-deep)}
+#cPad .c-minus{width:52px;color:var(--ink)}
+#cPad .c-cell.c-sold .c-minus{width:40px}
+#cPad .c-minus span{font-size:34px}
+#cPad .c-minus small{font-size:10px}
+#cPad .c-count{padding:0 12px;gap:8px}
+#cPad .c-count span{
+  flex:0 1 auto;min-width:0;font-size:20px;line-height:1.15;font-weight:800;letter-spacing:-.02em;text-align:left;
+  overflow:hidden;overflow-wrap:anywhere;
+}
+#cPad .c-count b{flex:none;font-size:60px;line-height:1;font-weight:800;letter-spacing:-.04em;font-variant-numeric:tabular-nums}
+#cPad .c-count b.wide{font-size:46px}
+/* a flavour's samples and its Sold: the name on top (one line), the number under it */
+#cPad .c-cell.c-yes .c-count,#cPad .c-cell.c-sold .c-count{
+  flex-direction:column;align-items:stretch;justify-content:center;gap:2px;padding:4px 12px;
+}
+#cPad .c-cell.c-yes .c-count span{white-space:nowrap;text-overflow:ellipsis;overflow-wrap:normal}
+#cPad .c-cell.c-yes .c-count b{text-align:right}
+#cPad .c-cell.c-sold .c-count{padding:4px 6px}
+#cPad .c-cell.c-sold .c-count span{font-size:11px;letter-spacing:.06em;text-transform:uppercase;text-align:center;opacity:.9}
+#cPad .c-cell.c-sold .c-count b{font-size:40px;text-align:center}
+#cPad .c-cell.c-sold .c-count b.wide{font-size:30px}
+/* "hit" = one added, "off" = one taken off: shown on that count only */
+#cPad .c-cell.hit{filter:brightness(1.22)}
+#cPad .c-cell.hit .c-count b{transform:scale(1.1)}
+#cPad .c-cell.off .c-count b{transform:scale(.88)}
+#cPad .c-cell.off .c-minus{background:var(--edge);color:#fff}
+#cPad .c-cell.off .c-minus small{color:#fff}
+
+/* sizes follow the number of rows, so every row is easy to hit and every number fits */
+#cPad[data-rows="3"] .c-count b{font-size:46px}
+#cPad[data-rows="3"] .c-count b.wide{font-size:38px}
+#cPad[data-rows="3"] .c-cell.c-sold .c-count b{font-size:34px}
+#cPad[data-rows="3"] .c-cell.c-sold .c-count b.wide{font-size:26px}
+#cPad[data-rows="3"] .c-count span{font-size:18px}
+#cPad[data-rows="4"] .c-count b{font-size:38px}
+#cPad[data-rows="4"] .c-count b.wide{font-size:32px}
+#cPad[data-rows="4"] .c-cell.c-sold .c-count b{font-size:28px}
+#cPad[data-rows="4"] .c-cell.c-sold .c-count b.wide{font-size:22px}
+#cPad[data-rows="4"] .c-count span{font-size:16px}
+#cPad[data-rows="4"] .c-minus span{font-size:28px}
+#cPad[data-rows="5"] .c-count b,#cPad[data-rows="6"] .c-count b,#cPad[data-rows="7"] .c-count b{font-size:30px}
+#cPad[data-rows="5"] .c-count b.wide,#cPad[data-rows="6"] .c-count b.wide,#cPad[data-rows="7"] .c-count b.wide{font-size:26px}
+#cPad[data-rows="5"] .c-cell.c-sold .c-count b,#cPad[data-rows="6"] .c-cell.c-sold .c-count b,#cPad[data-rows="7"] .c-cell.c-sold .c-count b{font-size:22px}
+#cPad[data-rows="5"] .c-cell.c-sold .c-count b.wide,#cPad[data-rows="6"] .c-cell.c-sold .c-count b.wide,#cPad[data-rows="7"] .c-cell.c-sold .c-count b.wide{font-size:19px}
+#cPad[data-rows="5"] .c-count span,#cPad[data-rows="6"] .c-count span,#cPad[data-rows="7"] .c-count span{font-size:14px}
+#cPad[data-rows="5"] .c-minus span,#cPad[data-rows="6"] .c-minus span,#cPad[data-rows="7"] .c-minus span{font-size:24px}
+#cPad[data-rows="5"] .c-minus small,#cPad[data-rows="6"] .c-minus small,#cPad[data-rows="7"] .c-minus small{display:none}
+#cPad[data-rows="5"] .c-cell.c-sold .c-count span,#cPad[data-rows="6"] .c-cell.c-sold .c-count span,#cPad[data-rows="7"] .c-cell.c-sold .c-count span{font-size:9px}
+#cPad[data-rows="5"] .c-count,#cPad[data-rows="6"] .c-count,#cPad[data-rows="7"] .c-count{padding-top:2px;padding-bottom:2px;gap:0}
+#cPad[data-rows="5"] .c-cell.c-no .c-count b,#cPad[data-rows="6"] .c-cell.c-no .c-count b,#cPad[data-rows="7"] .c-cell.c-no .c-count b{font-size:30px}
+
+/* the band shows the three totals no single box shows */
+.c-band{grid-template-columns:1fr 1fr 1fr}
+
+/* short phones: the band becomes one slim line and the line above it a little lower, so the rows keep their height */
+@media (orientation:portrait) and (max-height:700px){
+  .c-band{padding:3px 4px}
+  .c-band div{display:flex;justify-content:center;align-items:baseline;gap:5px}
+  .c-band span{font-size:10px}
+  .c-band b{font-size:17px}
+  #cBack{height:48px}
+  .counter.rows-many .c-band{display:none}
+  #cPad[data-rows="4"] .c-count b{font-size:32px}
+  #cPad[data-rows="4"] .c-count b.wide{font-size:28px}
+  #cPad[data-rows="4"] .c-minus small{display:none}
+  #cPad[data-rows="6"] .c-count b,#cPad[data-rows="7"] .c-count b{font-size:24px}
+  #cPad[data-rows="6"] .c-count b.wide,#cPad[data-rows="7"] .c-count b.wide{font-size:21px}
+  #cPad[data-rows="6"] .c-count span,#cPad[data-rows="7"] .c-count span{font-size:13px}
+}
+/* narrow phones */
+@media (max-width:350px){
+  #cPad .c-minus{width:44px}
+  #cPad .c-cell.c-sold .c-minus{width:36px}
+  #cPad .c-count{padding-left:8px;padding-right:8px}
+  #cPad .c-count b{font-size:46px}
+  #cPad .c-count b.wide{font-size:36px}
+}
+/* phone on its side: the rows sit two side by side and the band goes, so each count keeps a usable size */
+@media (orientation:landscape) and (max-height:520px){
+  #cPad{grid-template-columns:1fr 1fr;grid-auto-flow:row;grid-auto-rows:1fr}
+  .c-band{display:none}
+  #cPad .c-count b,#cPad[data-rows] .c-count b{font-size:32px}
+  #cPad .c-count b.wide,#cPad[data-rows] .c-count b.wide{font-size:26px}
+  #cPad .c-cell.c-sold .c-count b,#cPad[data-rows] .c-cell.c-sold .c-count b{font-size:22px}
+  #cPad .c-count span,#cPad[data-rows] .c-count span{font-size:14px}
+  #cPad .c-cell.c-sold .c-count span,#cPad[data-rows] .c-cell.c-sold .c-count span{font-size:10px}
+  #cPad .c-minus{width:44px}
+  #cPad .c-cell.c-sold,#cPad[data-rows] .c-cell.c-sold{flex-basis:32%}
+  #cPad .c-cell.c-sold .c-minus,#cPad[data-rows] .c-cell.c-sold .c-minus{width:36px}
+  #cPad .c-minus small{display:none}
+  #cPad .c-minus span,#cPad[data-rows] .c-minus span{font-size:24px}
+}
+/* a minus with nothing to take off is greyed out, its "−" included */
+#cPad .c-minus:disabled{color:var(--ink-3)}
+
+/* the tasting sheet with flavours: one block per flavour, its samples and its Sold */
+.vf-three{grid-template-columns:1fr 1fr 1fr}
+.vf-three div{padding:10px 8px}
+.vf-three div + div{border-left:var(--bw) solid var(--edge)}
+.vf-three span{font-size:10px}
+.vf-flav{border-top:var(--bw) solid var(--edge);padding:8px 14px;font-size:13px;font-weight:600;color:var(--ink-2)}
+.vs-flav{border:var(--bw) solid var(--edge);padding:10px;display:grid;gap:8px;background:var(--rest)}
+.vs-flav-h{display:flex;gap:8px;align-items:center}
+.vs-flav-h input{
+  flex:1;min-width:0;padding:9px 10px;background:var(--card);border:var(--bw) solid var(--edge);font-weight:800;
+}
+.vs-flav-h input:focus,.newflav input:focus{outline:3px solid var(--blue);outline-offset:1px}
+.vs-flav-t{font-weight:800}
+.vs-flav .stepper button,.vs-flav .stepper input{background:var(--card)}
+.newflav{display:grid;grid-template-columns:1fr auto;gap:8px}
+
+/* the payslip */
+.payseg{background:var(--card);box-shadow:var(--sh)}
+.sum-row.strong{font-weight:800;border-top:2px solid var(--edge);padding-top:6px}
+.sum-row.strong + .sum-row.strong{border-top:0;padding-top:0}
+.slip .lab{display:block;margin-bottom:6px}
+.pill-wait{background:#FFF1D0;color:var(--amber-ink)}
+.sum-total small{display:block;font-size:11px;font-weight:700;letter-spacing:.02em;text-transform:none;opacity:.8}
+.info-row{
+  border:var(--bw) solid var(--edge);background:var(--rest);color:var(--ink-2);
+  padding:8px 10px;font-weight:700;font-size:13px;text-align:left;width:100%;
+}
+.row-s.ok{color:#0B5B36;font-weight:700}
+/* with one or two flavour rows there is room for a wider Sold */
+#cPad[data-rows="2"] .c-cell.c-sold,#cPad[data-rows="3"] .c-cell.c-sold{flex-basis:36%}
+#cPad[data-rows="2"] .c-cell.c-sold .c-minus,#cPad[data-rows="3"] .c-cell.c-sold .c-minus{width:44px}
+/* phone on its side: the rows are low and wide, so a name sits beside its number, not above it */
+@media (orientation:landscape) and (max-height:520px){
+  #cPad .c-cell.c-yes .c-count,#cPad .c-cell.c-sold .c-count,
+  #cPad[data-rows] .c-cell.c-yes .c-count,#cPad[data-rows] .c-cell.c-sold .c-count{
+    flex-direction:row;align-items:center;justify-content:space-between;gap:6px;padding:0 8px;
+  }
+  #cPad .c-cell.c-yes .c-count span{flex:1 1 auto}
+  #cPad .c-cell.c-sold,#cPad[data-rows] .c-cell.c-sold{flex-basis:38%}
+  #cPad .c-cell.c-sold .c-count,#cPad[data-rows] .c-cell.c-sold .c-count{padding:0 6px;gap:4px}
+  #cPad .c-cell.c-sold .c-count span,#cPad[data-rows] .c-cell.c-sold .c-count span{font-size:9px;flex:none}
+  #cPad .c-cell.c-sold .c-count b,#cPad[data-rows] .c-cell.c-sold .c-count b{font-size:20px;text-align:right}
+  #cPad .c-cell.c-sold .c-count b.wide,#cPad[data-rows] .c-cell.c-sold .c-count b.wide{font-size:17px}
+}
